@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+
+    <!-- Titre -->
+    <h2 class="text-center text-primary fw-bold mb-4">Mon Dashboard</h2>
+
+    {% if loans %}
+    <!-- Dashboard prêt détaillé -->
+    <div class="row g-4">
+
+        {% for loan in loans %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold">Prêt #{{ loop.index }}</h5>
+                    <p><strong>Montant demandé:</strong> {{ "{:,.2f}".format(loan.amount) }} EUR</p>
+                    <p><strong>Durée:</strong> {{ loan.duration }} {{ loan.period }}</p>
+                    <p><strong>Frais de dossier:</strong> {{ "{:,.2f}".format(loan.fee) }} EUR</p>
+                    <p><strong>Intérêts:</strong> {{ "{:,.2f}".format(loan.interest) }} EUR</p>
+                    <p><strong>Total à rembourser:</strong> {{ "{:,.2f}".format(loan.total) }} EUR</p>
+                    <p><strong>Objectif:</strong> {{ loan.objective }}</p>
+                    <p><strong>Statut:</strong> 
+                        {% if loan.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">En attente</span>
+                        {% elif loan.status == 'approved' %}
+                            <span class="badge bg-success">Approuvé</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Rejeté</span>
+                        {% endif %}
+                    </p>
+                    <div class="mt-auto">
+                        {% if loan.status == 'approved' %}
+                            {% if loan.contract_file %}
+                                <a href="{{ url_for('download_contract', loan_id=loan.id) }}"
+                                   class="btn btn-primary btn-sm w-100">
+                                    📄 Télécharger le contrat
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Contrat non disponible</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted">Action indisponible</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+        <div class="alert alert-info text-center mt-4">
+            Vous n'avez pas encore soumis de demande de prêt.
+        </div>
+    {% endif %}
+
+    <!-- Bouton nouvelle demande -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('apply_loan') }}" class="btn btn-success btn-lg">
+            ➕ Nouvelle demande de prêt
+        </a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ t['admin_panel'] }}</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th><th>User</th><th>{{ t['amount'] }}</th><th>{{ t['fees'] }}</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for loan in pending %}
+      <tr>
+        <td>{{ loan['id'] }}</td>
+        <td>{{ loan['username'] }}</td>
+        <td>{{ loan['amount'] }} €</td>
+        <td>{{ loan['fees'] }} €</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_confirm', loan_id=loan['id'], lang=lang) }}" style="display:inline">
+            <input type="hidden" name="admin_pass" value="{{ request.args.get('admin_pass') }}">
+            <button class="btn btn-success btn-sm">{{ t['confirm_payment'] }}</button>
+          </form>
+          <form method="post" action="{{ url_for('admin_reject', loan_id=loan['id'], lang=lang) }}" style="display:inline">
+            <input type="hidden" name="admin_pass" value="{{ request.args.get('admin_pass') }}">
+            <button class="btn btn-danger btn-sm">{{ t['reject_payment'] }}</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

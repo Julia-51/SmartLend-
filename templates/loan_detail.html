@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 700px;">
+        <div class="card-header bg-primary text-white">
+            <h3>Détails de votre demande de prêt</h3>
+            <p class="mb-0">Statut : 
+                {% if loan.status == 'pending' %}
+                    <span class="badge bg-warning text-dark">En cours d'examen</span>
+                {% elif loan.status == 'approved' %}
+                    <span class="badge bg-success">Approuvé</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejeté</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="card-body">
+            <h5 class="mb-3">Informations personnelles</h5>
+            <p><strong>Nom complet :</strong> {{ loan.fullname }}</p>
+            <p><strong>Date de naissance :</strong> {{ loan.dob }}</p>
+            <p><strong>Adresse :</strong> {{ loan.address }}</p>
+            <p><strong>Email :</strong> {{ loan.email }}</p>
+            <p><strong>RIB / Numéro bancaire :</strong> {{ loan.rib }}</p>
+
+            <h5 class="mt-4 mb-3">Détails du prêt</h5>
+            <p><strong>Montant souhaité :</strong> {{ loan.amount | floatformat:2 }} €</p>
+            <p><strong>Durée :</strong> {{ loan.duration }} mois</p>
+            <p><strong>Période de remboursement :</strong> {{ loan.period }}</p>
+            <p><strong>Objectif du prêt :</strong> {{ loan.objective }}</p>
+
+            <h5 class="mt-4 mb-3">Calcul financier</h5>
+            <p><strong>Frais de dossier :</strong> {{ loan.fee | floatformat:2 }} €</p>
+            <p><strong>Intérêts :</strong> {{ loan.interest | floatformat:2 }} €</p>
+            <p><strong>Total à rembourser :</strong> {{ loan.total | floatformat:2 }} €</p>
+
+            {% if loan.identity_file %}
+            <h5 class="mt-4 mb-3">Pièce d'identité</h5>
+            <a href="{{ url_for('download_file', filename=loan.identity_file) }}" class="btn btn-outline-primary" target="_blank">
+                Télécharger
+            </a>
+            {% endif %}
+
+            {% if loan.status == 'pending' %}
+            <div class="alert alert-info mt-4">
+                Votre demande est en cours d'examen par notre équipe. Vous recevrez un email après validation.
+            </div>
+            {% endif %}
+
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Retour au tableau de bord</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.card-header h3 {
+    font-weight: 700;
+}
+
+.badge {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .card-body p {
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}

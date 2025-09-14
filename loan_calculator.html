@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ t["loan_calculator"] }} - SmartLend</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">SmartLend</div>
+    <div class="menu">
+      <a href="/?lang={{ lang }}">{{ t["home"] }}</a>
+      <a href="/dashboard?lang={{ lang }}">{{ t["dashboard"] }}</a>
+      <span class="lang-switch">
+        🌐
+        <a href="{{ request.path }}?lang=fr">🇫🇷</a>
+        <a href="{{ request.path }}?lang=en">🇬🇧</a>
+      </span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>{{ t["loan_calculator"] }}</h2>
+    <form method="post">
+      <label>{{ t["amount"] }}</label>
+      <input type="number" name="amount" step="100" required>
+
+      <label>{{ t["duration"] }} ({{ t["months"] }})</label>
+      <input type="number" name="months" required>
+
+      <button type="submit" class="btn">{{ t["calculate"] }}</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+      <h3>{{ t["result"] }}</h3>
+      <p>💰 {{ t["amount"] }} : {{ amount }} €</p>
+      <p>📑 {{ t["fees"] }} (10%) : {{ fees }} €</p>
+      <p>📈 {{ t["interest_rate"] }} : 15% / an</p>
+      <p>💳 {{ t["monthly_payment"] }} : {{ monthly_payment }} €</p>
+      <p>🔔 {{ t["total_payment"] }} : {{ total_payment }} €</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>from math import pow
+
+@app.route("/loan-calculator", methods=["GET", "POST"])
+def loan_calculator():
+    lang = request.args.get("lang", "fr")
+    result = None
+    amount = 0
+    fees = 0
+    monthly_payment = 0
+    total_payment = 0
+
+    if request.method == "POST":
+        try:
+            amount = float(request.form["amount"])
+            months = int(request.form["months"])
+
+            # Frais de dossier = 10%
+            fees = round(amount * 0.10, 2)
+
+            # Taux d’intérêt annuel (15%) → mensuel
+            annual_rate = 0.15
+            monthly_rate = annual_rate / 12
+
+            # Formule amortissement (mensualité fixe)
+            if monthly_rate > 0:
+                monthly_payment = round(amount * (monthly_rate * pow(1 + monthly_rate, months)) / (pow(1 + monthly_rate, months) - 1), 2)
+            else:
+                monthly_payment = round(amount / months, 2)
+
+            # Montant total à payer
+            total_payment = round(monthly_payment * months + fees, 2)
+
+            result = True
+        except:
+            result = False
+
+    return render_template(
+        "loan_calculator.html",
+        t=translations[lang],
+        lang=lang,
+        result=result,
+        amount=amount,
+        fees=fees,
+        monthly_payment=monthly_payment,
+        total_payment=total_payment
+    )
+{% if result %}
+    <h2>{{ t["result"] }}</h2>
+    <p>{{ t["amount"] }}: {{ amount }} €</p>
+    <p>{{ t["fees"] }}: {{ fees }} €</p>
+    <p>{{ t["interest_rate"] }}: 15%</p>
+    <p>{{ t["monthly_payment"] }}: {{ monthly_payment }} €</p>
+    <p>{{ t["total_payment"] }}: {{ total_payment }} €</p>
+
+    <h3>{{ t["signature"] }}</h3>
+    <canvas id="signature-pad" width="400" height="200" style="border:1px solid #000;"></canvas><br>
+    <button type="button" onclick="clearSignature()">Effacer</button>
+    <form method="post" action="/download-receipt" onsubmit="saveSignature()">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="hidden" name="months" value="{{ months }}">
+        <input type="hidden" name="fees" value="{{ fees }}">
+        <input type="hidden" name="monthly" value="{{ monthly_payment }}">
+        <input type="hidden" name="total" value="{{ total_payment }}">
+        <input type="hidden" name="signature" id="signature-data">
+        <button type="submit">{{ t["download_pdf"] }}</button>
+    </form>
+
+    <script>
+        let canvas = document.getElementById("signature-pad");
+        let ctx = canvas.getContext("2d");
+        let drawing = false;
+
+        canvas.addEventListener("mousedown", () => { drawing = true; });
+        canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
+        canvas.addEventListener("mousemove", draw);
+
+        canvas.addEventListener("touchstart", e => { drawing = true; });
+        canvas.addEventListener("touchend", () => { drawing = false; ctx.beginPath(); });
+        canvas.addEventListener("touchmove", drawTouch);
+
+        function draw(e) {
+            if (!drawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "black";
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        }
+
+        function drawTouch(e) {
+            e.preventDefault();
+            if (!drawing) return;
+            let touch = e.touches[0];
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "black";
+            ctx.lineTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveSignature() {
+            let dataURL = canvas.toDataURL("image/png");
+            document.getElementById("signature-data").value = dataURL;
+        }
+    </script>
+{% endif %}

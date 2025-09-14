@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h2>Confirmation de votre demande</h2>
+    <p>Merci {{ loan.fullname }} ! Votre demande de prêt est en cours d'examen.</p>
+    <ul>
+        <li>Montant demandé : {{ "{:,.2f}".format(loan.amount) }} €</li>
+        <li>Frais de dossier : {{ "{:,.2f}".format(loan.fee) }} €</li>
+        <li>Intérêt : {{ "{:,.2f}".format(loan.interest) }} €</li>
+        <li>Total à rembourser : {{ "{:,.2f}".format(loan.total) }} €</li>
+        <li>RIB : {{ loan.rib }}</li>
+        <li>Email : {{ loan.email }}</li>
+    </ul>
+    <p>Vous recevrez un email avec votre contrat après approbation.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Retour au tableau de bord</a>
+</div>
+{% endblock %}

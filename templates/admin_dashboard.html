@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-primary mb-4">Tableau de bord administrateur</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Utilisateur</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for loan in loans %}
+            <tr>
+                <td>{{ loan.id }}</td>
+                <td>{{ loan.fullname }}</td>
+                <td>{{ "{:,.2f}".format(loan.amount) }} EUR</td>
+                <td>{{ loan.status }}</td>
+                <td>
+                    <a href="{{ url_for('approve_loan', loan_id=loan.id) }}" class="btn btn-success btn-sm">Approuver</a>
+                    <a href="{{ url_for('reject_loan', loan_id=loan.id) }}" class="btn btn-danger btn-sm">Rejeter</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

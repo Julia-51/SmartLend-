@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demande reçue</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<header class="navbar"><div class="logo"><a href="{{ url_for('index', lang=lang) }}">SmartLend</a></div></header>
+
+<div class="container">
+  <h2>{{ t['received'] }}</h2>
+  <p>Montant demandé : <strong>{{ amount }} €</strong></p>
+  <p>Frais de dossier (10%) : <strong>{{ fee }} €</strong></p>
+  <p>Nous vous contacterons sous peu pour suite à donner.</p>
+  <a class="btn" href="{{ url_for('dashboard', lang=lang) }}">Retour au tableau de bord</a>
+</div>
+
+<footer class="footer">{{ t['contact'] }}</footer>
+</body>
+</html>

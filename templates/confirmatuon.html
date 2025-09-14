@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="confirmation-box" style="max-width:600px;margin:30px auto;padding:25px;border:1px solid #ccc;border-radius:12px;background:#f9f9f9;">
+    <h2 style="text-align:center;color:#333;">Votre demande de prêt</h2>
+
+    <p>Bonjour <strong>{{ fullname }}</strong>,</p>
+
+    <p>Nous avons bien reçu votre demande de prêt. Voici le récapitulatif :</p>
+
+    <ul style="list-style:none;padding:0;">
+        <li><strong>Montant demandé :</strong> {{ amount }} €</li>
+        <li><strong>Frais de dossier :</strong> {{ fee }} €</li>
+        <li><strong>Durée :</strong> {{ duration }} mois</li>
+        <li><strong>Mensualité estimée :</strong> {{ monthly }} €</li>
+    </ul>
+
+    <p>En attendant la confirmation de votre dossier par le directeur et le paiement des frais de dossier, nous avons besoin de votre numéro bancaire pour compléter votre demande.</p>
+
+    <form action="{{ url_for('add_bank_account_page', loan_id=loan_id, lang=lang) }}" method="post" style="margin-top:20px;">
+        <label for="bank_account" style="display:block;margin-bottom:6px;font-weight:bold;">Numéro bancaire :</label>
+        <input type="text" id="bank_account" name="bank_account" placeholder="Ex: FR76 1234 5678 9012 3456 7890" 
+               value="{{ bank_account or '' }}" required style="width:100%;padding:8px;margin-bottom:15px;border:1px solid #ccc;border-radius:6px;">
+
+        <button type="submit" style="width:100%;padding:10px;background:#007bff;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;">
+            Confirmer et enregistrer
+        </button>
+    </form>
+
+    <p style="margin-top:15px;color:#555;font-size:13px;">SmartLend vous garantit sécurité et confidentialité de vos informations bancaires.</p>
+</div>
+{% endblock %}

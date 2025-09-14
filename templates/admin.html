@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center text-primary mb-4">Tableau de bord Admin – SmartLend</h1>
+
+    <div class="table-responsive shadow rounded p-3 bg-white">
+        <table class="table table-hover align-middle">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom complet</th>
+                    <th>Email</th>
+                    <th>Montant (€)</th>
+                    <th>Durée</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.id }}</td>
+                    <td>{{ loan.fullname }}</td>
+                    <td>{{ loan.email }}</td>
+                    <td>{{ "{:,.2f}".format(loan.amount) }}</td>
+                    <td>{{ loan.duration }} {{ loan.period }}</td>
+                    <td>
+                        {% if loan.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">En attente</span>
+                        {% elif loan.status == 'approved' %}
+                            <span class="badge bg-success">Approuvé</span>
+                        {% else %}
+                            <span class="badge bg-danger">Rejeté</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if loan.status == 'pending' %}
+                            <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='approved') }}" class="btn btn-success btn-sm me-1">Approuver</a>
+                            <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='rejected') }}" class="btn btn-danger btn-sm">Rejeter</a>
+                        {% else %}
+                            <span class="text-muted">Action terminée</span>
+                        {% endif %}
+                    </td>
+                    <td>
+    <a href="{{ url_for('download_file', filename=loan.identity_file) }}" class="btn btn-secondary btn-sm">Télécharger ID</a>
+</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+/* Styles fintech premium */
+body {
+    background-color: #f5f7fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+.table th {
+    background-color: #1a73e8;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e8f0fe;
+}
+
+.btn {
+    font-weight: 600;
+    border-radius: 0.35rem;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 0.75em;
+}
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .btn {
+        font-size: 0.75rem;
+        padding: 0.3em 0.5em;
+    }
+}
+</style>
+{% endblock %}
