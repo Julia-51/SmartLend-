@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+
+# Virtual env
+venv/
+env/
+*.env
+
+# PDF générés
+*.pdf
+
+# Termux / système
+*.swp
