@@ -480,7 +480,17 @@ def init_db():
     conn.commit()
     conn.close()
 
-if __name__=="__main__":
-    os.makedirs(app.config['UPLOAD_FOLDER'],exist_ok=True)
+if __name__ == "__main__":
+    import os
+
+    # Crée le dossier de uploads si nécessaire
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+    # Initialise la base de données
     init_db()
-    app.run(debug=True)
+
+    # Détecte le port Render, sinon 5000 par défaut
+    port = int(os.environ.get("PORT", 5000))
+
+    # Lance l'app
+    app.run(host="0.0.0.0", port=port, debug=True)
