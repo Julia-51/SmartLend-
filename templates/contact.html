@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background: linear-gradient(90deg, #ff4d6d, #0d6efd); text-align:left; padding:40px 20px; border-radius:10px;">
+    <h2>Contactez SmartLend</h2>
+    <p>Pour toute question ou assistance, remplissez le formulaire ci-dessous. Notre équipe vous répondra rapidement.</p>
+</div>
+
+<section style="margin-top:40px; max-width:600px; margin-left:auto; margin-right:auto;">
+    <form method="POST">
+        <label for="name">Nom :</label><br>
+        <input type="text" id="name" name="name" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;"><br>
+
+        <label for="email">Email :</label><br>
+        <input type="email" id="email" name="email" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;"><br>
+        
+        <label>Sujet :</label>
+        <input type="text" name="subject" required>
+
+        <label for="message">Message :</label><br>
+        <textarea id="message" name="message" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;" rows="6"></textarea><br>
+
+        <button type="submit" style="background-color:#0d6efd; color:white; padding:12px 25px; border:none; border-radius:5px; font-weight:600; cursor:pointer;">Envoyer</button>
+    </form>
+</section>
+{% endblock %}

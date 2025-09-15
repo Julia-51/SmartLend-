@@ -1,22 +1,23 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="form-container">
-    <h2>Créer un compte</h2>
-    <form method="POST">
-        <div class="form-group">
-            <label>Nom d'utilisateur</label>
-            <input type="text" name="username" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" name="password" required>
-        </div>
-        <button class="btn btn-primary" type="submit">S'inscrire</button>
-    </form>
-    <p class="switch-form">Déjà un compte ? <a href="{{ url_for('login') }}">Connectez-vous</a></p>
+<div class="hero" style="padding:50px 20px; text-align:center; border-radius:10px;">
+    <h2>Créer un compte SmartLend</h2>
+    <p>Rejoignez notre plateforme fintech premium pour vos prêts numériques.</p>
 </div>
+
+<section style="margin-top:40px; max-width:400px; margin-left:auto; margin-right:auto;">
+    <form method="POST">
+        <label for="username">Nom d'utilisateur :</label><br>
+        <input type="text" id="username" name="username" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;"><br>
+
+        <label for="email">Email :</label><br>
+        <input type="email" id="email" name="email" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;"><br>
+
+        <label for="password">Mot de passe :</label><br>
+        <input type="password" id="password" name="password" required style="width:100%; padding:12px; margin:8px 0; border-radius:5px; border:1px solid #ccc;"><br>
+
+        <button type="submit" class="btn-primary" style="width:100%; margin-top:15px;">S'inscrire</button>
+    </form>
+</section>
 {% endblock %}

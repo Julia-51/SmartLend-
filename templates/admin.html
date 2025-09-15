@@ -1,95 +1,109 @@
 {% extends "base.html" %}
+{% block title %}Admin – Gestion des prêts{% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <h1 class="text-center text-primary mb-4">Tableau de bord Admin – SmartLend</h1>
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 fw-bold text-primary">Tableau de bord – Administration</h1>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Déconnexion</a>
+  </div>
 
-    <div class="table-responsive shadow rounded p-3 bg-white">
-        <table class="table table-hover align-middle">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nom complet</th>
-                    <th>Email</th>
-                    <th>Montant (€)</th>
-                    <th>Durée</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for loan in loans %}
-                <tr>
-                    <td>{{ loan.id }}</td>
-                    <td>{{ loan.fullname }}</td>
-                    <td>{{ loan.email }}</td>
-                    <td>{{ "{:,.2f}".format(loan.amount) }}</td>
-                    <td>{{ loan.duration }} {{ loan.period }}</td>
-                    <td>
-                        {% if loan.status == 'pending' %}
-                            <span class="badge bg-warning text-dark">En attente</span>
-                        {% elif loan.status == 'approved' %}
-                            <span class="badge bg-success">Approuvé</span>
-                        {% else %}
-                            <span class="badge bg-danger">Rejeté</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if loan.status == 'pending' %}
-                            <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='approved') }}" class="btn btn-success btn-sm me-1">Approuver</a>
-                            <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='rejected') }}" class="btn btn-danger btn-sm">Rejeter</a>
-                        {% else %}
-                            <span class="text-muted">Action terminée</span>
-                        {% endif %}
-                    </td>
-                    <td>
-    <a href="{{ url_for('download_file', filename=loan.identity_file) }}" class="btn btn-secondary btn-sm">Télécharger ID</a>
-</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="card shadow-sm rounded-4">
+    <div class="card-header bg-light">
+      <h2 class="h5 fw-semibold mb-0 text-primary">Liste des demandes de prêt</h2>
     </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover align-middle text-nowrap">
+        <thead class="table-primary">
+          <tr>
+            <th>#</th>
+            <th>Nom complet</th>
+            <th>Email</th>
+            <th>Montant (€)</th>
+            <th>Durée</th>
+            <th>Période</th>
+            <th>Frais</th>
+            <th>Intérêts</th>
+            <th>Total</th>
+            <th>Identité</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in loans %}
+            <tr>
+              <td>{{ loan.id }}</td>
+              <td>{{ loan.fullname }}</td>
+              <td>{{ loan.email }}</td>
+              <td>{{ "%.2f"|format(loan.amount) }}</td>
+              <td>{{ loan.duration }} mois</td>
+              <td>{{ loan.period }}</td>
+              <td>{{ "%.2f"|format(loan.fee) }}</td>
+              <td>{{ "%.2f"|format(loan.interest) }}</td>
+              <td class="fw-bold">{{ "%.2f"|format(loan.total) }}</td>
+              <td>
+                {% if loan.identity_file %}
+                  <a href="{{ url_for('download_file', filename=loan.identity_file) }}"
+                     class="btn btn-sm btn-outline-primary"
+                     target="_blank">
+                    Télécharger
+                  </a>
+                {% else %}
+                  <span class="text-muted">Aucun</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if loan.status == 'approved' %}
+                  <span class="badge bg-success">Approuvé</span>
+                {% elif loan.status == 'rejected' %}
+                  <span class="badge bg-danger">Rejeté</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">En attente</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='approved') }}"
+                     class="btn btn-sm btn-success">
+                    Approuver
+                  </a>
+                  <a href="{{ url_for('admin_change_status', loan_id=loan.id, status='rejected') }}"
+                     class="btn btn-sm btn-danger">
+                    Rejeter
+                  </a>
+                  {% if loan.contract_file %}
+                    <a href="{{ url_for('download_file', filename=loan.contract_file) }}"
+                       class="btn btn-sm btn-outline-dark"
+                       target="_blank">
+                      Contrat
+                    </a>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="12" class="text-center text-muted py-4">
+                Aucune demande trouvée.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+                     <li><a href="{{ url_for('admin_messages') }}">📩 Messages</a></li>
+      </table>
+    </div>
+  </div>
 </div>
-
-<style>
-/* Styles fintech premium */
-body {
-    background-color: #f5f7fa;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-h1 {
-    font-weight: 700;
-}
-
-.table th {
-    background-color: #1a73e8;
-    color: white;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-.table-hover tbody tr:hover {
-    background-color: #e8f0fe;
-}
-
-.btn {
-    font-weight: 600;
-    border-radius: 0.35rem;
-}
-
-.badge {
-    font-size: 0.85rem;
-    padding: 0.5em 0.75em;
-}
-@media (max-width: 768px) {
-    .table-responsive {
-        overflow-x: auto;
-    }
-    .btn {
-        font-size: 0.75rem;
-        padding: 0.3em 0.5em;
-    }
-}
-</style>
 {% endblock %}

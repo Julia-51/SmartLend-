@@ -1,210 +1,157 @@
-/* --------- RESET --------- */
-* {
+/* -------------------- GLOBAL -------------------- */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f6fa;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #f6f8fb;
     color: #333;
-    line-height: 1.6;
 }
 
-/* --------- NAVBAR --------- */
-.navbar {
-    background: #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    padding: 0.8rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: #0d6efd;
+    margin: 0 0 15px 0;
 }
 
-.navbar .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #004aad;
+a {
     text-decoration: none;
+    color: #ff4d6d;
 }
 
-.nav-links a, .nav-links span {
-    margin-left: 1rem;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
+a:hover {
+    color: #0d6efd;
 }
 
-.nav-links a:hover {
-    color: #004aad;
-}
-
-/* --------- BUTTONS --------- */
-.btn {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    text-align: center;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: #004aad;
-    color: #fff;
+button, .btn-primary {
+    background: #0d6efd;
+    color: white;
     border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.btn-primary:hover {
-    background: #00337a;
+button:hover, .btn-primary:hover {
+    background: #ff4d6d;
 }
 
-/* --------- CONTAINERS --------- */
-.home-container {
-    max-width: 800px;
-    margin: 4rem auto;
-    text-align: center;
-    padding: 2rem;
-}
-
-.form-container {
-    background: #fff;
-    padding: 2rem;
+/* -------------------- HEADER / HERO -------------------- */
+.hero {
+    background: linear-gradient(90deg, #ff4d6d, #0d6efd);
+    color: white;
+    padding: 40px 20px;
     border-radius: 12px;
-    max-width: 600px;
-    margin: 2rem auto;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
-/* --------- FORMS --------- */
+.hero p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* -------------------- FORMS -------------------- */
 form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
 }
 
-.form-group {
-    margin-bottom: 1.2rem;
-}
-
-label {
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    display: block;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="date"],
-input[type="number"],
-select {
-    width: 100%;
-    padding: 0.7rem;
+form input, form select, form textarea {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    border-radius: 6px;
     font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-input:focus, select:focus {
-    outline: none;
-    border-color: #004aad;
-    box-shadow: 0 0 4px rgba(0,74,173,0.2);
+form label {
+    margin-bottom: 5px;
+    font-weight: 500;
 }
 
-input[type="file"] {
-    border: none;
+/* -------------------- TABLES -------------------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
 }
 
-/* --------- FLASH & ALERTS --------- */
-.flash-messages {
-    max-width: 600px;
-    margin: 1rem auto;
-    padding: 0 1rem;
+table th, table td {
+    padding: 12px;
+    text-align: left;
 }
 
-.alert {
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.6rem;
+table th {
+    background: #0d6efd;
+    color: white;
+    font-weight: 600;
+}
+
+table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:hover {
+    background: #f0f8ff;
+}
+
+/* -------------------- MESSAGES / FLASH -------------------- */
+.flash {
+    padding: 15px 20px;
     border-radius: 6px;
-    font-size: 0.95rem;
+    margin-bottom: 20px;
 }
 
-.alert.success {
-    background: #e6f7e6;
-    color: #2e7d32;
+.flash-success {
+    background: #d1e7dd;
+    color: #0f5132;
 }
 
-.alert.error {
-    background: #fdecea;
-    color: #c62828;
+.flash-danger {
+    background: #f8d7da;
+    color: #842029;
 }
 
-/* --------- FOOTER --------- */
-footer {
-    background: #fff;
-    padding: 1rem 0;
-    text-align: center;
-    color: #777;
-    font-size: 0.9rem;
-    border-top: 1px solid #eee;
-    margin-top: 3rem;
+.flash-warning {
+    background: #fff3cd;
+    color: #664d03;
 }
 
-/* --------- RESPONSIVE --------- */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
+.flash-info {
+    background: #cff4fc;
+    color: #055160;
+}
+
+/* -------------------- SECTION -------------------- */
+section {
+    margin: 40px auto;
+    max-width: 700px;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media screen and (max-width: 768px) {
+    .hero {
+        padding: 30px 15px;
     }
-    .nav-links {
-        margin-top: 0.5rem;
-    }
-    .form-container, .home-container {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
-    body {
-        font-size: 15px;
-    }
-}
 
-@media (max-width: 480px) {
-    html {
-        font-size: 14px;
+    form {
+        padding: 20px;
     }
-    .btn {
-        width: 100%;
+
+    table th, table td {
+        padding: 8px;
     }
-}
-.table-dashboard {
-    font-size: 0.95rem;
-    text-align: center;
-    vertical-align: middle;
-}
 
-.table-dashboard th,
-.table-dashboard td {
-    padding: 12px 10px;
-    white-space: nowrap; /* évite le retour à la ligne */
-}
-
-.table-dashboard th:nth-child(2),
-.table-dashboard td:nth-child(2) {
-    text-align: right; /* Montants alignés à droite */
-}
-
-.table-dashboard th:last-child,
-.table-dashboard td:last-child {
-    text-align: center;
+    button, .btn-primary {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
 }

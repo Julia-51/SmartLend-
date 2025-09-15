@@ -448,6 +448,36 @@ def admin_dashboard():
     loans = conn.execute("SELECT * FROM loans").fetchall()
     conn.close()
     return render_template("admin.html", loans=loans)
+
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        subject = request.form["subject"]
+        content = request.form["message"]
+
+        conn = get_db_connection()
+        conn.execute(
+            "INSERT INTO messages (name, email, subject, content) VALUES (?, ?, ?, ?)",
+            (name, email, subject, content),
+        )
+        conn.commit()
+        conn.close()
+
+        flash("✅ Votre message a bien été envoyé !", "success")
+        return redirect(url_for("contact"))
+
+    return render_template("contact.html")
+
+@app.route("/admin/messages")
+def admin_messages():
+    conn = get_db_connection()
+    msgs = conn.execute(
+        "SELECT * FROM messages ORDER BY created_at DESC"
+    ).fetchall()
+    conn.close()
+    return render_template("admin_messages.html", messages=msgs)
 # --- CREATE TABLES IF NOT EXIST ---
 def init_db():
     conn = get_db_connection()
@@ -477,8 +507,18 @@ def init_db():
                         status TEXT,
                         FOREIGN KEY(user_id) REFERENCES users(id)
                     )""")
+    conn.execute("""CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     conn.commit()
-    conn.close()
+    conn.close()    
 
 if __name__ == "__main__":
     import os

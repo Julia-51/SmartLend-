@@ -1,17 +1,27 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="form-container">
-    <h2>Confirmation de votre demande</h2>
-    <p>Merci {{ loan.fullname }} ! Votre demande de prêt est en cours d'examen.</p>
-    <ul>
-        <li>Montant demandé : {{ "{:,.2f}".format(loan.amount) }} €</li>
-        <li>Frais de dossier : {{ "{:,.2f}".format(loan.fee) }} €</li>
-        <li>Intérêt : {{ "{:,.2f}".format(loan.interest) }} €</li>
-        <li>Total à rembourser : {{ "{:,.2f}".format(loan.total) }} €</li>
-        <li>RIB : {{ loan.rib }}</li>
-        <li>Email : {{ loan.email }}</li>
-    </ul>
-    <p>Vous recevrez un email avec votre contrat après approbation.</p>
-    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Retour au tableau de bord</a>
-</div>
+<section style="max-width:700px; margin:auto; padding:20px;">
+    <h2 style="text-align:center; margin-bottom:25px; color:#0d6efd;">Demande reçue</h2>
+
+    <div style="background:white; padding:25px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <p>Bonjour <strong>{{ loan.fullname }}</strong>,</p>
+        <p>Votre demande de prêt a été <strong>enregistrée et est en cours d'examen</strong>. Vous recevrez une notification dès qu'elle sera approuvée ou rejetée.</p>
+
+        <h3 style="margin-top:20px; color:#ff4d6d;">Détails de votre demande :</h3>
+        <table style="width:100%; margin-top:10px; border-collapse: collapse;">
+            <tr><td><strong>Montant demandé :</strong></td><td>{{ loan.amount | round(2) }} €</td></tr>
+            <tr><td><strong>Durée :</strong></td><td>{{ loan.duration }}</td></tr>
+            <tr><td><strong>Période :</strong></td><td>{{ loan.period }}</td></tr>
+            <tr><td><strong>Frais de dossier :</strong></td><td>{{ loan.fee | round(2) }} €</td></tr>
+            <tr><td><strong>Intérêts calculés :</strong></td><td>{{ loan.interest | round(2) }} €</td></tr>
+            <tr><td><strong>Total à rembourser :</strong></td><td>{{ loan.total | round(2) }} €</td></tr>
+            <tr><td><strong>Objectif :</strong></td><td>{{ loan.objective }}</td></tr>
+        </table>
+
+        <div style="text-align:center; margin-top:25px;">
+            <a href="{{ url_for('dashboard') }}" class="btn-primary" style="padding:10px 18px;">Retour au tableau de bord</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

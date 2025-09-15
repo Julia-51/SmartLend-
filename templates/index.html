@@ -1,8 +1,24 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="home-container">
-    <h1>Bienvenue chez SmartLend</h1>
-    <p>Obtenez un prêt personnel rapide, transparent et sécurisé.</p>
-    <a class="btn btn-primary" href="{{ url_for('register') }}">Commencer</a>
+<div class="hero">
+    <h2>Bienvenue chez SmartLend</h2>
+    <p>La plateforme fintech premium pour vos prêts numériques. Simple, rapide et sécurisé. Faites confiance à SmartLend pour vos besoins financiers.</p>
+    <a href="{{ url_for('register') }}" class="btn-primary">Créer un compte</a>
 </div>
+
+<section class="why">
+    <div class="why-item">
+        <h3>Rapide & Simple</h3>
+        <p>Demandez un prêt en quelques minutes avec notre interface intuitive. Tout est digital, sans paperasse inutile.</p>
+    </div>
+    <div class="why-item">
+        <h3>Sécurisé & Fiable</h3>
+        <p>Vos données et transactions sont protégées grâce aux standards de sécurité les plus stricts de la fintech moderne.</p>
+    </div>
+    <div class="why-item">
+        <h3>Transparence & Confiance</h3>
+        <p>Frais clairs, processus transparent et contrat PDF professionnel. Vous savez toujours ce que vous payez et recevez.</p>
+    </div>
+</section>
 {% endblock %}

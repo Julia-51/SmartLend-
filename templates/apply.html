@@ -1,54 +1,84 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="form-container">
-    <h2>Demande de prêt</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label>Nom complet</label>
-            <input type="text" name="fullname" required>
-        </div>
-        <div class="form-group">
-            <label>Date de naissance</label>
-            <input type="date" name="dob" required>
-        </div>
-        <div class="form-group">
-            <label>Adresse</label>
-            <input type="text" name="address" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label>Montant du prêt (€)</label>
-            <input type="number" name="amount" required>
-        </div>
-        <div class="form-group">
-            <label>Durée de remboursement (en mois)</label>
-            <input type="number" name="duration" required>
-        </div>
-        <div class="form-group">
-            <label>Période de remboursement</label>
-            <select name="period" required>
-                <option value="mensuel">Mensuel</option>
-                <option value="trimestriel">Trimestriel</option>
-                <option value="semestriel">Semestriel</option>
-                <option value="annuel">Annuel</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Objectif du prêt</label>
-            <input type="text" name="objective" required>
-        </div>
-        <div class="form-group">
-            <label>RIB / Numéro bancaire</label>
-            <input type="text" name="rib" required>
-        </div>
-        <div class="form-group">
-            <label>Pièce d'identité (PDF, JPG, PNG)</label>
-            <input type="file" name="identity" accept=".pdf,.jpg,.jpeg,.png" required>
-        </div>
-        <button class="btn btn-primary" type="submit">Soumettre la demande</button>
-    </form>
-</div>
+<section style="max-width:1200px; margin:auto; padding:30px;">
+    <h2 style="text-align:center; color:#0d6efd; font-size:2rem; margin-bottom:30px;">
+        Demande de prêt
+    </h2>
+
+    <div style="background:white; border-radius:15px; padding:30px; box-shadow:0 8px 25px rgba(0,0,0,0.08);">
+        <p style="text-align:center; font-size:1rem; margin-bottom:25px;">
+            Remplissez le formulaire ci-dessous pour soumettre votre demande de prêt. Toutes les informations sont sécurisées et traitées de manière professionnelle.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data" style="display:grid; gap:25px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            
+            <!-- Bloc Infos personnelles -->
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Nom complet</label>
+                <input type="text" name="fullname" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Date de naissance</label>
+                <input type="date" name="dob" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div style="grid-column:1 / -1;">
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Adresse</label>
+                <input type="text" name="address" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Email</label>
+                <input type="email" name="email" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+
+            <!-- Bloc Infos prêt -->
+            <h3 style="color:#ff4d6d; grid-column:1 / -1;">Informations sur le prêt</h3>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Montant demandé (€)</label>
+                <input type="number" step="0.01" name="amount" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Durée</label>
+                <input type="number" name="duration" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Période</label>
+                <select name="period" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+                    <option value="mensuel">Mensuel</option>
+                    <option value="trimestriel">Trimestriel</option>
+                    <option value="semestriel">Semestriel</option>
+                    <option value="annuel">Annuel</option>
+                </select>
+            </div>
+            <div style="grid-column:1 / -1;">
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Objectif du prêt</label>
+                <textarea name="objective" rows="3" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;"></textarea>
+            </div>
+
+            <!-- Bloc RIB + Document identité -->
+            <h3 style="color:#ff4d6d; grid-column:1 / -1;">Informations bancaires et identité</h3>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">RIB</label>
+                <input type="text" name="rib" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+            <div>
+                <label style="font-weight:600; display:block; margin-bottom:5px;">Pièce d'identité (PDF/JPG/PNG)</label>
+                <input type="file" name="identity" required style="width:100%; padding:12px; border-radius:10px; border:1px solid #ccc;">
+            </div>
+
+            <!-- Bouton envoyer -->
+            <div style="grid-column:1 / -1; text-align:center; margin-top:10px;">
+                <button type="submit" style="padding:14px 30px; background:#0d6efd; color:white; font-weight:700; border:none; border-radius:12px; font-size:1.1rem; cursor:pointer; transition:0.3s;">
+                    Soumettre ma demande
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+@media (max-width:768px){
+    form { grid-template-columns: 1fr !important; }
+}
+</style>
 {% endblock %}
